@@ -1,0 +1,8 @@
+:toc: left
+:toclevels: 5
+:sectnums:
+
+# 塾活動
+include::00_haikei.adoc[]
+include::01_model.adoc[]
+include::02_houshiki.adoc[]

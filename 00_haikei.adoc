@@ -1,0 +1,10 @@
+
+## 背景
+aaa
+
+### 認証認可に取り組む理由
+セキュリティには以下の要素がある。
+
+todo:NIST800-171の要素をひっぱってくる。参考：https://www.manageengine.jp/solutions/nist_publications/nist_SP800-171/lp/
+
+その中で、特に重要なのが認証認可であり、付随するセッション管理なのでこれに取り組むものである。
