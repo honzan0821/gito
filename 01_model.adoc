@@ -1,3 +1,7 @@
+:toc:
+:toclevels: 5
+:sectnums:
+
 # ユースケース
 
 ## 作業の目的
