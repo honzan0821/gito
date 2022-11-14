@@ -80,12 +80,12 @@ NOTE: 重要なものを選別しようと思って調べ始めたらoauth2.0の
 
 
 #### 実装すべき仕様
+ああああ
 
 
+#### メモ
 
-
-##### メモ
-###### 参考
+##### 参考
 // OAuth2.0
 「OAuth 2.0」の基本動作を知る　2017/9/1
 https://atmarkit.itmedia.co.jp/ait/articles/1708/31/news124.html
@@ -126,9 +126,8 @@ OAuth2.0 に対する脅威と対策：金融オープン API の一段の有効
 https://www.imes.boj.or.jp/research/papers/japanese/kk37-3-4.pdf
 
 
+##### 調べた用語
 
-
-###### 調べた用語
 [options="autowidth"]
 |===
 |用語 |説明 |参考サイト
