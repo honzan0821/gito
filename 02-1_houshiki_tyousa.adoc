@@ -33,46 +33,55 @@ NOTE: 重要なものを選別しようと思って調べ始めたらoauth2.0の
 .認証認可に関連するRFCや標準化団体の仕様一覧
 [options="autowidth"]
 |===
-|公開日 |RFC等 |タイトル | 概要 | BCP | FAPI1.0 baseline | FAPI1.0 Advance |MSAセキュリティ本
-| 2012/10 | RFC6749 |The OAuth 2.0 Authorization Framework  | | | | | ○
-| 2012/10 | RFC6750 |The OAuth 2.0 Authorization Framework: Bearer Token Usage  | | | | |
-| 2013/1 | RFC6819 |OAuth 2.0 Threat Model and Security Considerations  | | | | | ○
-| 2013/8 | RFC7009 |OAuth 2.0 Token Revocation  | | | | |
-| 2014/11 | OpenID Foundation |OpenID Connect Core 1.0 incorporating errata set 1  | | | | |
-| 2015/7 | RFC7591 |OAuth 2.0 Dynamic Client Registration Protocol  | | | | | ○
-| 2015/9 | RFC7638 |Proof Key for Code Exchange by OAuth Public Clients(PKCE)  | | | | |
-| 2015/10 | RFC7662 |OAuth 2.0 Token Introspection  | | | | | ○
-| 2019/8 | RFC8628 |OAuth 2.0 Device Authorization Grant  | | | | |
-| 2020/1 | RFC8693 |OAuth 2.0 Token Exchange  | | | | | ○
-| 2021/8 | RFC9101 |The OAuth 2.0 Authorization Framework: JWT-Secured Authorization Request (JAR)  | | | | |
-| 2021/9 | RFC9126 |OAuth 2.0 Pushed Authorization Requests(PAR)  | | | | |
-| 2021/9 | OpenID Foundation |OpenID Connect Client-Initiated Backchannel Authentication Flow - Core 1.0(CIBA)  | | | | |
+|公開日 |RFC等 |タイトル | 概要 | BCP | FAPI1.0 baseline | FAPI1.0 Advance |MSAセキュリティ本 | Authlete社川崎さんがFAPI読む前に最低限1度は目を通すべきという仕様か
+| 2012/10 | RFC6749 |The OAuth 2.0 Authorization Framework  | | | ○ | | ○ | ○
+| 2012/10 | RFC6750 |The OAuth 2.0 Authorization Framework: Bearer Token Usage  | || ○ | | ○ | ○
+| 2013/1 | RFC6819 |OAuth 2.0 Threat Model and Security Considerations  | | | ○ | | ○ | 
+| 2013/8 | RFC7009 |OAuth 2.0 Token Revocation  | | | | | |
+| 2014/2 | OpenID Foundation |OAuth 2.0 Multiple Response Type Encoding Practices  | | | | | | ○
+| 2014/11 | OpenID Foundation |OpenID Connect Core 1.0 incorporating errata set 1  | | | ○ | | | ○
+| 2014/11 | OpenID Foundation |OpenID Connect Discovery 1.0 incorporating errata set 1  | | | ○ | | | ○
+| 2014/11 |OpenID Foundation | OpenID Connect Dynamic Client Registration 1.0 incorporating errata set 1 | | | | | | ○
+| 2014/4 | OpenID Foundation |OAuth 2.0 Form Post Response Mode | | | | | | ○
+| 2015/7 | RFC7591 |OAuth 2.0 Dynamic Client Registration Protocol  | | | | | | ○
+| 2015/9 | RFC7636 |Proof Key for Code Exchange by OAuth Public Clients(PKCE)  | | |○  | | | ○
+| 2015/10 | RFC7662 |OAuth 2.0 Token Introspection  | | | | | | ○
+| 2018/6 | RFC8414 | OAuth 2.0 Authorization Server Metadata  | | |○ | | | 
+| 2018/10 | OIDF(Draft-02) |Financial-grade API: JWT Secured Authorization Response Mode for OAuth 2.0 (JARM)  | | | | | | △
+| 2019/8 | RFC8628 |OAuth 2.0 Device Authorization Grant  | | | | | |
+| 2020/1 | RFC8693 |OAuth 2.0 Token Exchange  | | | | | | ○
+| 2020/2 | RFC8705 |OAuth 2.0 Mutual-TLS Client Authentication and Certificate-Bound Access Tokens | | | ○ | | | △
+| 2021/8 | RFC9101 |The OAuth 2.0 Authorization Framework: JWT-Secured Authorization Request (JAR)  | | | | | |
+| 2021/9 | RFC9126 |OAuth 2.0 Pushed Authorization Requests(PAR)  | | | | | |
+| 2021/9 | OpenID Foundation |OpenID Connect Client-Initiated Backchannel Authentication Flow - Core 1.0(CIBA)  | | | | | |
 
-| 2022/11 | draft-ietf-oauth-rar-15 |OAuth 2.0 Rich Authorization Requests(RAR)  | | | | |
-| 2022/8 | draft-ietf-oauth-dpop-11 |OAuth 2.0 Demonstrating Proof-of-Possession at the Application Layer(DPoP)  | | | | |
+| 2022/11 | draft-ietf-oauth-rar-15 |OAuth 2.0 Rich Authorization Requests(RAR)  | | | | | |
+| 2022/8 | draft-ietf-oauth-dpop-11 |OAuth 2.0 Demonstrating Proof-of-Possession at the Application Layer(DPoP)  | | | | | |
 
 // BCP
-| 2022/9 | draft-ietf-oauth-security-topics-21 |OAuth 2.0 Security Best Current Practice |OAuth 2.0 の現在の最善のセキュリティ プラクティスについて説明しています。OAuth 2.0 セキュリティ脅威モデル[RFC6819]を更新および拡張してOAuth 2.0 が公開されてから収集された実際の経験を組み込み、OAuth 2.0の広範なアプリケーションに関連する新しい脅威をカバーします | - | | | ○
+| 2022/9 | draft-ietf-oauth-security-topics-21 |OAuth 2.0 Security Best Current Practice |OAuth 2.0 の現在の最善のセキュリティ プラクティスについて説明しています。OAuth 2.0 セキュリティ脅威モデル[RFC6819]を更新および拡張してOAuth 2.0 が公開されてから収集された実際の経験を組み込み、OAuth 2.0の広範なアプリケーションに関連する新しい脅威をカバーします | - | | | ○ | 
+
+| 2017/10 | RFC8252/BCP212  |OAuth 2.0 for Native Apps | | - | ○ | | ○ | 
 
 // FAPI1.0関係仕様
-| 2019/8 | OpenID Foundation  |Financial-grade API: Client Initiated Backchannel Authentication Profile  | | | | |
-| 2021/3 | OpenID Foundation  |Financial-grade API Security Profile 1.0 - Part 1: Baseline  | | | | |
-| 2021/3 | OpenID Foundation  |Financial-grade API Security Profile 1.0 - Part 2: Advanced  | | | | |
+| 2019/8 | OpenID Foundation  |Financial-grade API: Client Initiated Backchannel Authentication Profile  | | | | | |
+| 2021/3 | OpenID Foundation  |Financial-grade API Security Profile 1.0 - Part 1: Baseline  | | | | | |
+| 2021/3 | OpenID Foundation  |Financial-grade API Security Profile 1.0 - Part 2: Advanced  | | | | | |
 
 // OpenID Connect Logout specifications
-| 2022/9 | OpenID Foundation  | OpenID Connect Session Management 1.0  | | | | |
-| 2022/9 | OpenID Foundation  | OpenID Connect Front-Channel Logout 1.0  | | | | |
-| 2022/9 | OpenID Foundation  | OpenID Connect Back-Channel Logout 1.0  | | | | |
-| 2022/9 | OpenID Foundation  | OpenID Connect RP-Initiated Logout 1.0  | | | | |
+| 2022/9 | OpenID Foundation  | OpenID Connect Session Management 1.0  | | | | | |
+| 2022/9 | OpenID Foundation  | OpenID Connect Front-Channel Logout 1.0  | | | | | |
+| 2022/9 | OpenID Foundation  | OpenID Connect Back-Channel Logout 1.0  | | | | | |
+| 2022/9 | OpenID Foundation  | OpenID Connect RP-Initiated Logout 1.0  | | | | | |
 
 // JWT関連
-| 2015/5 | RFC7515 | JSON Web Signature (JWS)  | | | | |
-| 2015/5 | RFC7516 | JSON Web Encryption (JWE)  | | | | |
-| 2015/5 | RFC7517 | JSON Web Key (JWK)  | | | | | ○
-| 2015/5 | RFC7518 | JSON Web Algorithms (JWA)  | | | | | ○
-| 2015/5 | RFC7519 | JSON Web Token (JWT)  | | | | | ○
-| 2015/5 | RFC7523 |JSON Web Token (JWT) Profile for OAuth 2.0 Client Authentication and Authorization Grants | | | | | ○
-| 2020/2 | RFC8725/BCP225 |JSON Web Token Best Current Practices  | | | | | |○
+| 2015/5 | RFC7515 | JSON Web Signature (JWS)  | | | | | | ○
+| 2015/5 | RFC7516 | JSON Web Encryption (JWE)  | | | | | | ○
+| 2015/5 | RFC7517 | JSON Web Key (JWK)  | | | | | ○ | ○
+| 2015/5 | RFC7518 | JSON Web Algorithms (JWA)  | | | | | ○ | ○
+| 2015/5 | RFC7519 | JSON Web Token (JWT)  | | | | | ○ | ○
+| 2015/5 | RFC7523 |JSON Web Token (JWT) Profile for OAuth 2.0 Client Authentication and Authorization Grants | | | | | ○ | ○
+| 2020/2 | RFC8725/BCP225 |JSON Web Token Best Current Practices  | | | | | | |
 
 
 |===
@@ -80,8 +89,6 @@ NOTE: 重要なものを選別しようと思って調べ始めたらoauth2.0の
 
 
 #### 実装すべき仕様
-ああああ
-
 
 #### メモ
 
@@ -133,6 +140,9 @@ https://www.imes.boj.or.jp/research/papers/japanese/kk37-3-4.pdf
 |用語 |説明 |参考サイト
 | North-South トラフィック | 特定のデータセンターに出入りするネットワークトラフィックです。 |　https://en.wikipedia.org/wiki/North-south_traffic
 | East-west トラフィック | 特定のデータセンター内のデバイス間のネットワークトラフィックです |　https://en.wikipedia.org/wiki/East-west_traffic
+| Murual TLS | 一般的には、Mutual TLS というと、単に「TLS 通信時にクライアント側も証明書を提示する」ことを意味します。しかし、FAPI の文脈では、Mutual TLS は『RFC 8705 OAuth 2.0 Mutual TLS Client Authentication and Certificate Bound Access Tokens』（以降 MTLS）という仕様書で定義されている次の二つをさします。 + 
+クライアント証明書による OAuth クライアント認証 + 
+クライアント証明書に紐付くトークンに関する処理 | https://qiita.com/TakahikoKawasaki/items/83c47c9830097dba2744#%E5%89%8D%E6%8F%90%E7%9F%A5%E8%AD%98
 
 |===
 
@@ -144,6 +154,11 @@ https://www.imes.boj.or.jp/research/papers/japanese/kk37-3-4.pdf
 なので、有識者が考えたベストプラクティスである、OAuth 2.0 Security Best Current PracticeやFAPI 1.0をベースに採用されている仕様（RFC、OIDFとか）を整理して、それをベースに検討することにする。 +
 加えて、MSA Securityで考慮されている事項を加えて今回の一番素晴らしい認証認可とする。
 
+NOTE: 2022/11/14 18:00追記。とおもったけど、OAuth 2.0 Security Best Current Practiceをみたが序盤でくじけてしまった。。英語もそうだし、RFCに慣れてない・・・。FAPIのほうが日本語で解説しているサイトがあるので、そっちを先にみる。
+
+NOTE: FAPI2.0ではPAR、RAR、DPoPが新しい技術要素として入ってくるらしい。https://qiita.com/TakahikoKawasaki/items/83c47c9830097dba2744#%E5%89%8D%E6%8F%90%E7%9F%A5%E8%AD%98
+BCP-draft-14からdpopの記載があり、FAPI1.0よりは先をいっている。（そもそもBCPはまだdraftだけど・・・2017/9に00がでて今21だが永遠にdraftなのだろうか・・）
+
 ＜セキュリティのレベルイメージ＞
 [options="autowidth"]
 |===
@@ -153,6 +168,11 @@ https://www.imes.boj.or.jp/research/papers/japanese/kk37-3-4.pdf
 |レベル４|Financial-grade API Security Profile 1.0 - Part 2: Advanced|
 
 |===
+
+NOTE: OIDFのFAPI認証をみると、FAPI Adv. OP w/ MTLSとかFAPI Adv. OP w/ Private Key, PAR, JARMとかある。これがレベルに該当するか・・・？
+https://openid.net/certification/#FAPI_OPs
+fapi1.0 baselineに以下記述あり。レベル２のBCPを消すと確実にレベルわけと言える。
+潜在的に機密性の高い情報を提供する API など、一部の API は、基本的なRFC6749が要求するよりも高いレベルの保護を必要とします。FAPI は、このような優れた保護を提供します。（chrome翻訳）
 
 NOTE: OAuth 2.0 for Browser-Based Appsとか OAuth 2.0 for Native Appsとかは、アプリ形態に特化した仕様なのでみたほうがよさげ。 +
 OAuth2.1とFAPI2.0も時間があればみる。

@@ -3,6 +3,34 @@
 ### 検討
 
 #### 脅威とその対応
-脅威
+脅威の一覧は以下。
 
-参考
+[options="autowidth"]
+|===
+| 攻撃手法 | 概要 | 原因 | 対策 | 詳細情報ソース
+| Cross-Site Request Forgery | OAuth2.0におけるCSRFとは、被害者のクライアントアカウントに攻撃者のリソースが意図せず紐づけされる脆弱性のこと。被害者は知らないうちに攻撃者のアカウントにアクセスすることになり、情報送信（写真など）すると、攻撃者が自身の権限で参照できてしまう。 | 認可リクエストを送信したセッションと、認可コードを送信してきたセッションが同一であるかの検証に不備があるとCSRFの脆弱性が発生する。 | "stateパラメータ"を使用する。URLを踏んでもOPのセッションに無いため、認可レスポンスのURLにアクセスしてもstateチェックではじかれる。 |rfc6749#section-10.12, 図解：OAuth 2.0に潜む「5つの脆弱性」と解決法（攻撃手法１）
+
+|Token Replace Attack | バックエンドサーバに送るAccess Tokenを別のものに置き換える脆弱性のこと。攻撃者は被害者のAccess Tokenでできる操作が可能となる。 | Access Tokenが何らかの理由で漏洩すると脆弱性が発生する。特にImplicit Grantでは、Public ClientにAccess Tokenが直接渡されるため比較的漏洩しやすい。その他、Public Clientでも悪意のあるサービスを使用した場合、そのサービスがAccess tokenを悪用する可能性がある。 | Authorization Code Grantを使用する。かつ、Access TokenがどのClientに対して発行されたかチェックする。 | 図解：OAuth 2.0に潜む「5つの脆弱性」と解決法 （攻撃手法２）
+
+|Covert Redirect |  | |  | 図解：OAuth 2.0に潜む「5つの脆弱性」と解決法（攻撃手法３）
+
+|Authorization Code Interception Attack |  | |  | RFC7636
+
+|Authorization Code Interception Attack | カスタムURIスキームのように、標的となるClientと同一のRedirection Endpointによって起動するアプリケーションを作成・インストールされると認可コードが正規アプリでなく、悪意アプリに渡される。これにより、認可コードが攻撃者に渡る。 | -（OSの仕様のため） | Proof Key for Code Exchange by OAuth Public Clients（PKCE）を使用する。 | RFC7636
+
+|IdP Mix-Up Attack | |  | | 図解：OAuth 2.0に潜む「5つの脆弱性」と解決法（攻撃手法５） 
+
+|===
+
+##### 参考
+
+図解：OAuth 2.0に潜む「5つの脆弱性」と解決法 2017/10/24
+https://atmarkit.itmedia.co.jp/ait/articles/1710/24/news011.html
+
+// Cross-Site Request Forgeryの説明
+OAuth2.0におけるCSRFとは 2021/3/22
+https://techblog.securesky-tech.com/entry/2021/03/22/
+
+【連載】世界一わかりみの深いOAuth入門 〜 その4:stateパラメーターによるCSRF対策 〜 2021-06-02
+https://tech-lab.sios.jp/archives/25642
+
