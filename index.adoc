@@ -10,3 +10,7 @@ include::01_model.adoc[]
 include::02-1_houshiki_tyousa.adoc[]
 
 include::02-2_houshiki_kentou.adoc[]
+
+include::03_kousei_pattern.adoc[]
+
+include::04_zissou.adoc[]
