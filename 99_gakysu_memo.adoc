@@ -1,0 +1,55 @@
+## 勉強メモ
+### Financial-grade API (FAPI) 1.0
+#### 概要
+Financial-grade API（通称 FAPI; ファピ）は、OpenID Foundation の Financial-grade API ワーキンググループが策定した技術仕様。
+
+OAuth 2.0とOpenID Connect（以降 OIDC）を基盤とし、より高い API セキュリティーを必要とする金融業界および他の様々な業界のため、追加の技術要求事項を定めているセキュリティプロファイル。
+
+リスクが中程度（参照系APIなど）向けの**Part1:Baseline Security Profile**と、リスク高（更新系APIなど）向けの**Part2:Advanced Security Profile**の2種類がある。
+
+AdvancedはBaseline＋追加の要求事項（一部上書きあり）
+
+#### 重要用語
+通常使われる用語が、OAuth、OIDC、FAPIの文脈で変わるものがある。
+
+##### Proof Key for Code Exchange（PKCE）(RFC 7636)
+今から一年ほど前の 2015 年 9 月に RFC 7636 (Proof Key for Code Exchange by OAuth Public Clients) として公開された仕様を指しています。認可コード横取り攻撃 (authorization code interception attack) への対策として策定されました。
+
+細かい条件は幾つかありますが、スマートフォンで OAuth クライアントを作る場合は、クライアント側も認可サーバー側もこの仕様の実装が強く推奨されます。これを実装しておかないと、悪意のあるアプリケーションに認可コードを横取りされてしまい、結果、悪意のあるアプリケーションがアクセストークンを取得できてしまいます。
+
+引用参考２
+
+##### Proof of Posession(PoP)
+従来のアクセストークンは、漏洩してしまうと、攻撃者がそれを用いて API にアクセスすることができてしまいます。電車の切符を失くしてしまったら、それを拾った他の人が電車に乗れてしまうのと同じです。
+
+この脆弱性を軽減する手段として、アクセストークンの発行対象者とアクセストークンの利用者が同一であることを API アクセス時にチェックするという方法が考えられます。国際線航空チケットの利用時に、チケットと併せてパスポートの提示も要求し、正規のチケット利用者とチケット持参者が同一であることを確認する手続きと同じです。
+
+この概念は『Proof of Possession』（PoP）と総称されており、FAPI では Mutual TLS を唯一の PoP の選択肢として挙げています（過去の版では Token Binding も PoP 手法として挙げられていましたが最終版で削除されました）。この文脈における Mutual TLS は、RFC 8705 の『3. Mutual-TLS Client Certificate-Bound Access Tokens』で説明されている技術をさします。
+
+FAPI1.0の最終版より前には、Token Bindingも使用可でしたが、ChromeがTOKEN Binding機能を削除したため、FAPI 最終版から削除されました。
+
+引用参考１
+
+##### Mutual TLS
+
+一般的には、Mutual TLS というと、単に「TLS 通信時にクライアント側も証明書を提示する」ことを意味します。しかし、FAPI の文脈では、Mutual TLS は『RFC 8705 OAuth 2.0 Mutual TLS Client Authentication and Certificate Bound Access Tokens』（以降 MTLS）という仕様書で定義されている次の二つをさします。
+
+. クライアント証明書による OAuth クライアント認証
+. クライアント証明書に紐付くトークンに関する処理
+
+引用参考１
+
+上記では、２が通常のmTLS（クライアント証明書）では意識しないものになる。
+
+##### JARM
+
+#### OAuth2.0とoidc1.0との違い
+
+
+#### 参考
+
+. 実装者による Financial-grade API (FAPI) 解説
+https://qiita.com/TakahikoKawasaki/items/83c47c9830097dba2744#%E3%82%AF%E3%83%A9%E3%82%A4%E3%82%A2%E3%83%B3%E3%83%88%E8%A8%BC%E6%98%8E%E6%9B%B8%E3%81%AB%E7%B4%90%E4%BB%98%E3%81%8F%E3%83%88%E3%83%BC%E3%82%AF%E3%83%B3
+
+. PKCE: 認可コード横取り攻撃対策のために OAuth サーバーとクライアントが実装すべきこと
+https://qiita.com/TakahikoKawasaki/items/00f333c72ed96c4da659
