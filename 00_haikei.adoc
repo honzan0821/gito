@@ -5,6 +5,29 @@ aaa
 ### 認証認可に取り組む理由
 セキュリティには以下の要素がある。
 
-todo:NIST800-171の要素をひっぱってくる。参考：https://www.manageengine.jp/solutions/nist_publications/nist_SP800-171/lp/
+[NOTE]
+====
+有名なセキュリティフレームワーク、基準を使って全体像を示したい。以下が使えるか・・？
+セキュリティはシステムだけではなくて
+
+. 政府機関等のサイバーセキュリティ対策のための統一基準群
+https://www.nisc.go.jp/policy/group/general/kijun.html
+
+
+. 情報システムに係る政府調達におけるセキュリティ要件策定マニュアル」
+https://www.nisc.go.jp/policy/group/general/sbd_sakutei.html +
+５章 セキュリティ要件の策定が参考になる。全体像が図と表でまとめられている。
+
+> 本マニュアルでは、情報システムにおいて考えられる基本的なセキュリティ対策のための要件を、表11 に示す構成の「対策要件集」にまとめている
+
+. FISC　安対
+クラウドの話のなかで全体像の絵があった気がする。
+
+
+. NIST800-171
+https://www.manageengine.jp/solutions/nist_publications/nist_SP800-171/lp/
+
+https://www.nisc.go.jp/policy/group/general/kijun.html
+====
 
 その中で、特に重要なのが認証認可であり、付随するセッション管理なのでこれに取り組むものである。
