@@ -1,0 +1,373 @@
+@startuml
+' skinparam backgroundColor #EEEBDC
+' skinparam monochrome true
+autonumber
+
+title OAuth 2.0 認可コードグラントフロー with Authlete
+
+box "エンドユーザー"
+    actor "リソースオーナー" as RO
+    participant "ユーザーエージェント" as UA
+end box
+
+box "API クライアント"
+    participant "クライアント" as Client
+end box
+
+box "認可サーバー"
+    participant "認可 EP" as AuthzEP
+    participant "トークン EP" as TokenEP
+end box
+
+box "リソースサーバー"
+    participant "API EP" as RS
+end box
+
+box "Authlete"
+    participant "Authlete API" as Authlete
+end box
+
+RO -> UA: 認可プロセス\n開始（例: 「接続」\nボタンを押下）
+activate UA
+UA -> Client: リクエスト送信
+activate Client
+
+== トークン発行 ==
+
+Client -> Client: 認可リクエスト組立
+
+Client --> UA: 認可リクエストを\n返却（リダイレクト\nレスポンスとして）
+deactivate Client
+
+
+UA -> AuthzEP: 認可リクエストを送信
+activate AuthzEP
+
+note left
+**リクエスト例**
+
+""GET /authorize""
+"" ?redirect_uri=""
+""   https://client.example.org/cb/example.com""
+"" &response_type=code""
+"" &client_id=12800697055611""
+"" &code_challenge=E9M...""
+"" &code_challenge_method=S256""
+"" HTTP/1.1""
+""Host: as.example.com""
+end note
+
+AuthzEP -> AuthzEP: Authlete API への\nリクエスト（認可\nリクエスト全体を \n"""parameters""" の\n値として含む）を準備
+
+AuthzEP -> Authlete: ""/auth/authorization"" API 呼出
+activate Authlete
+
+note left
+**リクエスト例**
+
+""POST /api/auth/authorization HTTP/1.1""
+""Authorization: Basic ...""
+""...""
+
+""{ "parameters": "redirect_uri=""
+ ""https://client.example.org/cb/example.com""
+ ""&response_type=code&client_id=12800697055611""
+ ""&code_challenge=E9M...""
+ ""&code_challenge_method=S256" }""
+end note
+
+Authlete --> AuthzEP: レスポンス返却
+deactivate Authlete
+
+note left
+**レスポンス例**
+
+""{""
+""   [...]""
+""   "action" : "INTERACTION",""
+""   "resultCode" : "A004001",""
+""   "resultMessage" : "[A004001]""
+""     Authlete has successfully issued""
+""     a ticket to the service ...",""
+""   "ticket" : "9GH...",""
+""   "type" : "authorizationResponse"""
+""}""
+end note
+
+AuthzEP -> AuthzEP: """resultCode""" が\nエラーを示していない\nことと、"""action""" の値が\n """INTERACTION""" である\nことを確認
+
+AuthzEP -> AuthzEP: API レスポンスから \n"""ticket""" の値を抽出し、\nユーザーのセッションに\nひもづけ
+
+note over AuthzEP
+**例**
+
+"""ticket":"9GH..."""
+end note
+
+AuthzEP -> AuthzEP: ユーザー認証（and/or \nユーザー同意確認）\nの要否を確認
+
+opt ユーザー認証（and/or ユーザー同意確認）例
+  AuthzEP --> UA: ユーザー認証（and/or ユーザー同意確認）の\nコンテンツを返却
+  deactivate AuthzEP
+  UA --> RO: "ログインして\nください。" / \n "クライアントに\nアクセス許可を\n与えますか?"
+  deactivate UA
+
+  RO -> UA: ユーザー認証\n（and/or ユーザー\n同意確認）
+  activate UA
+
+  UA -> AuthzEP: リクエスト送信
+  activate AuthzEP
+
+AuthzEP -> AuthzEP: ユーザー認証（and/or \nユーザー同意確認）を処理
+
+end
+
+AuthzEP -> AuthzEP: ユーザーを識別し、\n"""subject""" の値を決定
+
+note over AuthzEP
+**例**
+
+"""subject":"testuser01"""
+end note
+
+AuthzEP -> AuthzEP: ユーザーのセッションから \n"""ticket""" の値を抽出
+
+note over AuthzEP
+**例**
+
+"""ticket":"9GH..."""
+end note
+
+opt
+  AuthzEP -> AuthzEP: Authlete API への\nリクエストに含める、\nその他の追加パラメーター\n（"""properties""" や \n"""scopes""" など）を準備
+end
+
+AuthzEP -> Authlete: ""/auth/authorization/issue"" API 呼出
+activate Authlete
+
+note left
+**リクエスト例**
+
+""POST /api/auth/authorization/issue HTTP/1.1""
+""Authorization: Basic ...""
+""...""
+
+""{ ""
+""  "ticket": "9GH...", ""
+""  "subject": "testuser01" ""
+""} ""
+end note
+
+Authlete --> AuthzEP: レスポンス返却
+deactivate Authlete
+
+note left
+**レスポンス例**
+
+""{""
+""   "responseContent" : ""
+""     "https://client.example.org/cb/example.com?code=ILe...",""
+""   "authorizationCode" : "ILe...",""
+""   "type" : "authorizationIssueResponse",""
+""   "resultMessage" : ""
+""     "[A040001] The authorization request ""
+""      was processed successfully.",""
+""   "resultCode" : "A040001",""
+""   "action" : "LOCATION",""
+""[...]""
+""}""
+end note
+
+AuthzEP -> AuthzEP: """resultCode""" が\nエラーを示していない\nことと、"""action""" の値が \n"""LOCATION""" である\nことを確認
+
+AuthzEP -> AuthzEP: API レスポンスから \n"""responseContent""" の\n値を抽出し、認可レスポンス\n（ユーザーエージェントを\n経由してクライアントに\n返却）を準備
+
+AuthzEP --> UA: 認可レスポンスを返却\n（リダイレクトレスポンスとして）
+deactivate AuthzEP
+
+note left
+**レスポンス例**
+
+""HTTP/1.1 302 Found""
+""Location: ""
+""  https://client.example.org/cb/example.com""
+""  ?code=ILe...""
+""...""
+end note
+
+UA -> Client: 認可レスポンスを送信
+activate Client
+
+note left
+**リクエスト例**
+
+""GET /cb/example.com""
+"" ?code=ILe...""
+"" HTTP/1.1""
+""Host: client.example.org""
+""...""
+end note
+
+Client -> Client: 認可レスポンス\nから値を抽出し、\nそれらを用いて\nトークンリクエストを\n組立
+
+Client -> TokenEP: トークンリクエストを送信
+activate TokenEP
+
+note left
+**リクエスト例**
+
+""POST /token HTTP/1.1""
+""Host: as.example.com""
+""Authorization: Basic ...""
+""...""
+
+""grant_type=authorization_code""
+"" &code=ILe...""
+"" &redirect_uri=""
+""   https://client.example.org/cb/example.com""
+"" &code_verifier=dBj...""
+end note
+
+TokenEP -> TokenEP: client_id と \nclient_secret を \n""Authorization"" \nヘッダーから抽出し、\nそれぞれの値を \n"""clientId""" および \n"""clientSecret""" \nとして含む、\nAuthlete API への\nリクエストを準備
+
+TokenEP -> TokenEP: トークンリクエストの\nボディの内容を抽出し、\nそれを """parameters""" の\n値として \nAuthlete API への\nリクエストに追加
+
+TokenEP -> Authlete: ""/auth/token"" API 呼出
+activate Authlete
+
+note left
+**リクエスト例**
+
+""POST /api/auth/token HTTP/1.1""
+""Authorization: Basic ...""
+""...""
+
+""{""
+""  "clientId": "12800697055611",""
+""  "clientSecret": "dcD...", ""
+""  "parameters": ""
+""    "grant_type=authorization_code""
+""       &code=ILe...""
+""       &redirect_uri=""
+""         https://client.example.org/cb/example.com""
+""       &code_verifier=dBj..." ""
+""}""
+end note
+
+Authlete --> TokenEP: レスポンス返却
+deactivate Authlete
+
+note left
+**レスポンス例**
+
+""{""
+""   "action" : "OK",""
+""   "grantType" : "AUTHORIZATION_CODE",""
+""   "subject" : "testuser01",""
+""   "type" : "tokenResponse",""
+""   "refreshToken" : "xpW...",""
+""   "accessToken" : "0ns...",""
+""   "responseContent" : ""
+""     "{\"access_token\":\"0ns...\",""
+""      \"refresh_token\":\"xpW...\",""
+""      \"scope\":null,""
+""      \"token_type\":\"Bearer\",""
+""      \"expires_in\":86400}",""
+""   "resultCode" : "A050001",""
+""   "resultMessage" : "[A050001] The token request""
+""     (grant_type=authorization_code) was processed""
+""     successfully.",""
+""[...]""
+""}""
+end note
+
+TokenEP -> TokenEP: """resultCode""" が\nエラーを示していない\nことと、"""action""" の値が \n"""OK""" であることを確認
+
+TokenEP -> TokenEP: API レスポンスから \n"""responseContent""" \nの値を抽出し、 \nクライアントへの\nトークンレスポンスを\n準備
+
+TokenEP --> Client: トークンレスポンスを返却
+deactivate TokenEP
+
+note left
+**レスポンス例**
+
+""{""
+""  "access_token":"0ns...",""
+""  "refresh_token":"xpW...",""
+""  "scope":null,""
+""  "token_type":"Bearer",""
+""  "expires_in":86400""
+""}""
+end note
+
+Client --> UA: レスポンス返却
+deactivate Client
+UA --> RO: 認可プロセス\n完了
+deactivate UA
+
+...
+
+== トークン検証 ==
+
+Client -> RS: アクセストークン付き API リクエスト送信
+activate Client
+activate RS
+
+note left
+**リクエスト例**
+
+""GET /items/12345 HTTP/1.1""
+""Host: api.example.com""
+""Authorization: Bearer 0ns...""
+end note
+
+RS -> RS: ""Authorization"" \nヘッダーから値を抽出し、\nそれを """token""" の値\nとして含む、\nAuthlete API への\nリクエストを準備
+
+note over RS
+**Example**
+
+"""token": "0ns..."""
+end note
+		
+RS -> Authlete: ""/auth/introspection"" API 呼出
+activate Authlete
+
+note left
+**リクエスト例**
+
+""POST /api/auth/introspection HTTP/1.1""
+""Authorization: Basic ...""
+""...""
+
+""{"token": "0ns..."}""
+end note
+
+Authlete --> RS: レスポンス返却
+deactivate Authlete
+
+note left
+**レスポンス例**
+
+""{""
+""   "type" : "introspectionResponse",""
+""   "resultCode" : "A056001",""
+""   "responseContent" : "Bearer error=\"invalid_request\"",""
+""   "action" : "OK",""
+""   "subject" : "testuser01",""
+""   "expiresAt" : 1558510744000,""
+""   "existent" : true,""
+""   "resultMessage" : "[A056001] The access token is valid.",""
+""   "clientId" : 12800697055611,""
+""...""
+""}""
+end note
+
+RS -> RS: """resultCode""" が\nエラーを示していない\nことと、"""action""" の値が \n"""OK""" であることを確認
+
+RS -> RS: トークンにひもづく値\n（"""subject""" や \n"""clientId"""、さらに\n場合によっては \n"""properties""" や \n"""scopes""" なども）\nを抽出し、クライアントが\n有するアクセス権限を判断
+
+RS --> Client: API レスポンス返却
+deactivate RS
+deactivate Client
+
+@enduml

@@ -30,4 +30,5 @@ https://www.manageengine.jp/solutions/nist_publications/nist_SP800-171/lp/
 https://www.nisc.go.jp/policy/group/general/kijun.html
 ====
 
-その中で、特に重要なのが認証認可であり、付随するセッション管理なのでこれに取り組むものである。
+その中で、特に重要なのが認証認可であり、付随するセッション管理なのでこれに取り組むものである。的なことを書く。
+
